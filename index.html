@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Auto Renew</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;margin:40px;background:#f7f8fb;color:#111}
+    .card{background:#fff;padding:24px;border-radius:12px;box-shadow:0 6px 20px rgba(20,30,60,0.08);max-width:800px;margin:0 auto}
+    h1{margin-top:6px}
+    hr{border:none;height:1px;background-color:#e0e0e0;margin:36px 0;}
+    p{margin:8px 0 16px;color:#334}
+    .bookmark-link{display:inline-block;padding:10px 14px;border-radius:8px;background:#0b63d6;color:#fff;text-decoration:none;font-weight:600;cursor:grab}
+    .code-container{position:relative}
+    pre{background:#f3f6fb;height:60px;padding:12px;border-radius:8px;overflow:auto;display:flex;flex-direction:column;justify-content:flex-end}
+    .code-type{position:absolute;top:8px;left:8px;padding:4px 8px;font-size:12px;border:none;color:#888888}
+    button.copy-btn{position:absolute;top:8px;right:8px;padding:4px 8px;font-size:12px;border:none;border-radius:6px;background:#bababa;color:#fff;cursor:pointer}
+    button.copy-btn:hover{background:#7D7D7D}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>拖曳藍色方塊至上方書籤列</h1>
+
+    <!-- Bookmarklet link. Double quotes inside the javascript are escaped as HTML entities so the attribute is valid. -->
+    <a class="bookmark-link" draggable="true" href="javascript:a=document.querySelectorAll('input[type=&quot;checkbox&quot;],input[type=&quot;radio&quot;][value=&quot;Continue&quot;]');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;}void 0;">Auto Renew</a>
+    <hr>
+    <h3 style="margin-top:18px">使用說明</h3>
+    <p>開啟Order Renew頁面，點選書籤即可勾選所有醫囑的核取方塊，隔離醫囑則會勾選「繼續隔離」。<br>注意：更新醫囑前請確認項目皆無誤。</p>
+
+    <h3>手動加入書籤</h3>
+    <p>如果無法拖曳，可手動新增一個書籤，並將以下程式碼貼至「URL」欄位</p>
+    <div class="code-container">
+        <div class="code-type">URL</div>
+        <button class="copy-btn" onclick="copyCode()">Copy</button>
+        <pre id="code-block">javascript:a=document.querySelectorAll('input[type="checkbox"],input[type="radio"][value="Continue"]');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;}void 0;</pre>
+    </div>
+  </div>
+  <script>
+    function copyCode(){
+      const codeText = document.getElementById('code-block').textContent.trim();
+      navigator.clipboard.writeText(codeText);
+    }
+  </script>
+</body>
+</html>
