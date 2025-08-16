@@ -6,7 +6,7 @@
   <title>Auto Renew</title>
   <style>
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;margin:40px;background:#f7f8fb;color:#111}
-    .card{background:#fff;padding:24px;border-radius:12px;box-shadow:0 6px 20px rgba(20,30,60,0.08);max-width:800px;margin:0 auto}
+    .card{background:#fff;padding:24px;border-radius:12px;box-shadow:0 6px 20px rgba(20,30,60,0.08);max-width:800px;margin:0 auto 32px auto}
     h1{margin-top:6px}
     hr{border:none;height:1px;background-color:#e0e0e0;margin:36px 0;}
     p{margin:8px 0 16px;color:#334}
@@ -32,13 +32,30 @@
     <p>如果無法拖曳，可手動新增一個書籤，並將以下程式碼貼至「URL」欄位</p>
     <div class="code-container">
         <div class="code-type">URL</div>
-        <button class="copy-btn" onclick="copyCode()">Copy</button>
-        <pre id="code-block">javascript:a=document.querySelectorAll('input[type="checkbox"],input[type="radio"][value="Continue"]');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;}void 0;</pre>
+        <button class="copy-btn" onclick="copyCode('code-block-v1')">Copy</button>
+        <pre id="code-block-v1">javascript:a=document.querySelectorAll('input[type="checkbox"],input[type="radio"][value="Continue"]');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;}void 0;</pre>
+    </div>
+  </div>
+  <div class="card">
+    <h1>新版 v3.0</h1>
+
+    <!-- Bookmarklet link. Double quotes inside the javascript are escaped as HTML entities so the attribute is valid. -->
+    <a class="bookmark-link" draggable="true" href="javascript:(function(){var a=document.querySelectorAll('td td td input[type=&quot;checkbox&quot;],input[type=&quot;radio&quot;][value=&quot;Continue&quot;],span&gt;*&gt;*&gt;*&gt;input[type=&quot;checkbox&quot;]');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;if(a[i].onclick){a[i].onclick();}}})();">ARv3</a>
+    <hr>
+    <h3 style="margin-top:18px">更新內容</h3>
+    <p>支援Lab Data帶入頁面</p>
+
+    <h3>手動加入書籤</h3>
+    <p>如果無法拖曳，可手動新增一個書籤，並將以下程式碼貼至「URL」欄位</p>
+    <div class="code-container">
+        <div class="code-type">URL</div>
+        <button class="copy-btn" onclick="copyCode('code-block-v2')">Copy</button>
+        <pre id="code-block-v2">javascript:(function(){var a=document.querySelectorAll('td td td input[type=&quot;checkbox&quot;],input[type=&quot;radio&quot;][value=&quot;Continue&quot;],span&gt;*&gt;*&gt;*&gt;input[type=&quot;checkbox&quot;]');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;if(a[i].onclick){a[i].onclick();}}})();</pre>
     </div>
   </div>
   <script>
-    function copyCode(){
-      const codeText = document.getElementById('code-block').textContent.trim();
+    function copyCode(elementId){
+      const codeText = document.getElementById(elementId).textContent.trim();
       navigator.clipboard.writeText(codeText);
     }
   </script>
