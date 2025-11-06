@@ -43,7 +43,7 @@
     <a class="bookmark-link" draggable="true" href="javascript:(function(){var a=document.querySelectorAll('td td td input[type=&quot;checkbox&quot;],input[type=&quot;radio&quot;][value=&quot;Continue&quot;],span&gt;*&gt;*&gt;*&gt;input[type=&quot;checkbox&quot;]');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;if(a[i].onclick){a[i].onclick();}}})();">ARv3</a>
     <hr>
     <h3 style="margin-top:18px">更新內容</h3>
-    <p>支援Lab Data帶入頁面（尚未經過完整測試，若有發現問題，歡迎回報！）</p>
+    <p>Auto Renew version 3.0，支援Lab Data帶入頁面</p>
 
     <h3>手動加入書籤</h3>
     <p>如果無法拖曳，可手動新增一個書籤，並將以下程式碼貼至「URL」欄位</p>
@@ -51,6 +51,23 @@
         <div class="code-type">URL</div>
         <button class="copy-btn" onclick="copyCode('code-block-v2')">Copy</button>
         <pre id="code-block-v2">javascript:(function(){var a=document.querySelectorAll('td td td input[type=&quot;checkbox&quot;],input[type=&quot;radio&quot;][value=&quot;Continue&quot;],span&gt;*&gt;*&gt;*&gt;input[type=&quot;checkbox&quot;]');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;if(a[i].onclick){a[i].onclick();}}})();</pre>
+    </div>
+  </div>
+  <div class="card">
+    <h1>護理評估專用</h1>
+
+    <!-- Bookmarklet link. Double quotes inside the javascript are escaped as HTML entities so the attribute is valid. -->
+    <a class="bookmark-link" draggable="true" href="javascript:(function(){var a=document.querySelectorAll('input#NTUHWeb1_rbl_ConsciousStatusCode_0,input#NTUHWeb1_rb_Verbal_N,input#NTUHWeb1_rb_Cognitive_N,input#NTUHWeb1_rb_Movement_N,input#NTUHWeb1_rbl_ChestPainCompression_0,input#NTUHWeb1_rb_InstepPulse_N,input#NTUHWeb1_rbl_RhythmCode_0,input#NTUHWeb1_rbl_Cough_0,input#NTUHWeb1_rb_OxygenSupply_N,input#NTUHWeb1_rb_RespiratoryPattern_N,input#NTUHWeb1_rb_BreathingSound_N,input#NTUHWeb1_rb_SputumElimination_N,input#NTUHWeb1_rbl_Sputum_0,input#NTUHWeb1_rbl_SputumColor_0,input#NTUHWeb1_rbl_SputumAppearanceCode_0,input#NTUHWeb1_rbl_ArtificalRespiratoryTractCode_0,input#NTUHWeb1_rbl_UrineCharacterCode_0,input#NTUHWeb1_rbl_InflamInfect_0,input#NTUHWeb1_rbl_Secretion_0,input#NTUHWeb1_rbl_SkinCondition4cm_0');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;}})();">Auto Assess</a>
+    <hr>
+    <h3 style="margin-top:18px">使用說明</h3>
+    <p>開啟「身體評估」或「傷口護理紀錄」頁面，點選書籤即可一鍵勾選那些沒有自動帶入的項目。再次點選即可全部取消。注意：儲存評估前請確認所有評估項目皆無誤！</p>
+
+    <h3>手動加入書籤</h3>
+    <p>如果無法拖曳，可手動新增一個書籤，並將以下程式碼貼至「URL」欄位</p>
+    <div class="code-container">
+        <div class="code-type">URL</div>
+        <button class="copy-btn" onclick="copyCode('code-block-v3')">Copy</button>
+        <pre id="code-block-v3">javascript:(function(){var a=document.querySelectorAll('input#NTUHWeb1_rbl_ConsciousStatusCode_0,input#NTUHWeb1_rb_Verbal_N,input#NTUHWeb1_rb_Cognitive_N,input#NTUHWeb1_rb_Movement_N,input#NTUHWeb1_rbl_ChestPainCompression_0,input#NTUHWeb1_rb_InstepPulse_N,input#NTUHWeb1_rbl_RhythmCode_0,input#NTUHWeb1_rbl_Cough_0,input#NTUHWeb1_rb_OxygenSupply_N,input#NTUHWeb1_rb_RespiratoryPattern_N,input#NTUHWeb1_rb_BreathingSound_N,input#NTUHWeb1_rb_SputumElimination_N,input#NTUHWeb1_rbl_Sputum_0,input#NTUHWeb1_rbl_SputumColor_0,input#NTUHWeb1_rbl_SputumAppearanceCode_0,input#NTUHWeb1_rbl_ArtificalRespiratoryTractCode_0,input#NTUHWeb1_rbl_UrineCharacterCode_0,input#NTUHWeb1_rbl_InflamInfect_0,input#NTUHWeb1_rbl_Secretion_0,input#NTUHWeb1_rbl_SkinCondition4cm_0');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;}})();</pre>
     </div>
   </div>
   <script>
