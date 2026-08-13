@@ -66,6 +66,15 @@
     .card hr { height: 1px; margin: 30px 0 24px; border: 0; background: var(--line); }
     .card p a { color: var(--accent); font-weight: 650; text-underline-offset: 3px; }
 
+    .help-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin: 0;
+    }
+    .help-links a { display: inline-flex; align-items: center; gap: 5px; }
+    .help-links a::after { content: "↗"; font-size: 12px; text-decoration: none; }
+
     .bookmark-link {
       display: inline-flex;
       align-items: center;
@@ -140,7 +149,11 @@
     <h3 style="margin-top:18px">簡介</h3>
     <p>Portal OCR 書籤版</p>
     <h3 style="margin-top:18px">使用說明</h3>
-    <p>開啟Portal並輸入帳號密碼後，點擊書籤即可自動輸入驗證碼並登入。第一次點擊時請確保網路暢通，並稍候5~10秒待AI模型載入後即可使用。先前版本：<a href="https://chromewebstore.google.com/detail/portal-ocr/mamafhaiocofdhlajpikaaibhlkieenk" target="_blank" rel="noopener noreferrer">瀏覽器擴充功能</a>（僅供個人電腦使用）。</p>
+    <p>開啟Portal並輸入帳號密碼後，點擊書籤即可自動輸入驗證碼並登入。第一次點擊時請確保網路暢通，並稍候5～10秒待AI模型載入後即可使用。</p>
+    <p class="help-links">
+      <a href="https://drive.google.com/file/d/1OBvvmpcKvHlHCI7c6RcnsG2UybkGR8Q7/view?usp=sharing" target="_blank" rel="noopener noreferrer">iPad 安裝說明</a>
+      <a href="https://chromewebstore.google.com/detail/portal-ocr/mamafhaiocofdhlajpikaaibhlkieenk" target="_blank" rel="noopener noreferrer">電腦版擴充功能（限個人電腦）</a>
+    </p>
 
     <h3>手動加入書籤</h3>
     <p>如果無法拖曳，可手動新增一個書籤，並將以下程式碼貼至「URL」欄位：</p>
