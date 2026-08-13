@@ -3,50 +3,166 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Auto Renew</title>
+  <title>Bookmarklet 工具箱</title>
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;margin:40px;background:#f7f8fb;color:#111}
-    .card{background:#fff;padding:24px;border-radius:12px;box-shadow:0 6px 20px rgba(20,30,60,0.08);max-width:800px;margin:0 auto 32px auto}
-    h1{margin-top:6px}
-    hr{border:none;height:1px;background-color:#e0e0e0;margin:36px 0;}
-    p{margin:8px 0 16px;color:#334}
-    .bookmark-link{display:inline-block;padding:10px 14px;border-radius:8px;background:#0b63d6;color:#fff;text-decoration:none;font-weight:600;cursor:grab}
-    .code-container{position:relative}
-    pre{background:#f3f6fb;height:60px;padding:12px;border-radius:8px;overflow:auto;display:flex;flex-direction:column;justify-content:flex-end}
-    .code-type{position:absolute;top:8px;left:8px;padding:4px 8px;font-size:12px;border:none;color:#888888}
-    button.copy-btn{position:absolute;top:8px;right:8px;padding:4px 8px;font-size:12px;border:none;border-radius:6px;background:#bababa;color:#fff;cursor:pointer}
-    button.copy-btn:hover{background:#7D7D7D}
+    :root {
+      color-scheme: light;
+      --page: #f5f7f9;
+      --surface: #ffffff;
+      --text: #18212b;
+      --muted: #5f6b78;
+      --line: #e3e8ee;
+      --accent: #0b63d6;
+      --accent-hover: #0954b8;
+      --accent-soft: #edf4ff;
+      --code: #f7f9fb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-header, main, footer {
+      width: min(calc(100% - 80px), 900px);
+      margin-inline: auto;
+    }
+
+    .page-header { padding: 64px 0 32px; }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .page-header h1 {
+      margin: 0;
+      font-size: clamp(30px, 6vw, 44px);
+      line-height: 1.2;
+      letter-spacing: -.035em;
+    }
+    .page-intro { max-width: 620px; margin: 14px 0 0; color: var(--muted); font-size: 17px; }
+
+    main { display: grid; gap: 20px; padding-bottom: 32px; }
+    .card {
+      min-width: 0;
+      padding: clamp(24px, 5vw, 38px);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 8px 28px rgba(24, 33, 43, .045);
+    }
+    .card h1 { margin: 0 0 18px; font-size: 24px; line-height: 1.3; letter-spacing: -.02em; }
+    .card h3 { margin: 28px 0 8px !important; font-size: 17px; letter-spacing: .02em; }
+    .card p { margin: 0 0 12px; color: var(--muted); }
+    .card hr { height: 1px; margin: 30px 0 24px; border: 0; background: var(--line); }
+    .card p a { color: var(--accent); font-weight: 650; text-underline-offset: 3px; }
+
+    .bookmark-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 46px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      background: var(--accent);
+      box-shadow: 0 4px 12px rgba(49, 95, 125, .18);
+      color: #fff;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: grab;
+      transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
+    }
+    .bookmark-link::before { content: "⋮⋮"; margin-right: 10px; opacity: .7; letter-spacing: -3px; }
+    .bookmark-link:hover { background: var(--accent-hover); box-shadow: 0 6px 16px rgba(49, 95, 125, .24); transform: translateY(-1px); }
+    .bookmark-link:active { cursor: grabbing; transform: translateY(0); }
+    .bookmark-link:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid rgba(49, 95, 125, .25); outline-offset: 3px; }
+
+    .code-container { position: relative; min-width: 0; max-width: 100%; margin-top: 14px; }
+    pre {
+      width: 100%;
+      max-width: 100%;
+      min-height: 96px;
+      margin: 0;
+      padding: 46px 14px 14px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--code);
+      color: #46515d;
+      font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      white-space: pre;
+    }
+    .code-type { position: absolute; top: 12px; left: 14px; color: #87919c; font-size: 11px; font-weight: 700; letter-spacing: .08em; }
+    button.copy-btn {
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      padding: 5px 11px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--accent);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.copy-btn:hover { background: var(--accent-soft); }
+    footer { padding: 6px 0 48px; color: #8a949f; font-size: 13px; text-align: center; }
+
+    @media (max-width: 520px) {
+      .page-header, main, footer { width: min(calc(100% - 32px), 900px); }
+      .page-header { padding-top: 40px; }
+      .card { border-radius: 14px; }
+    }
   </style>
 </head>
 <body>
-  <div class="card">
+  <header class="page-header">
     <h1>拖曳藍色方塊至上方書籤列</h1>
+    <p class="page-intro">拖曳藍色方塊至上方書籤以新增書籤，點擊書籤即可使用</p>
+  </header>
+  <main>
+  <div class="card">
+    <h1>Portal OCR</h1>
 
-    <!-- Bookmarklet link. Double quotes inside the javascript are escaped as HTML entities so the attribute is valid. -->
-    <a class="bookmark-link" draggable="true" href="javascript:a=document.querySelectorAll('input[type=&quot;checkbox&quot;],input[type=&quot;radio&quot;][value=&quot;Continue&quot;]');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;}void 0;">Auto Renew</a>
+    <!-- The bookmarklet href is populated from the shared string below. -->
+    <a id="bookmark-link-v1" class="bookmark-link" draggable="true" href="#">POCR</a>
     <hr>
+    <h3 style="margin-top:18px">簡介</h3>
+    <p>Portal OCR 書籤版</p>
     <h3 style="margin-top:18px">使用說明</h3>
-    <p>開啟Order Renew頁面，點選書籤即可勾選所有醫囑的核取方塊，隔離醫囑則會勾選「繼續隔離」。再次點選即可全部取消。注意：更新醫囑前請確認所有項目皆無誤！</p>
+    <p>開啟Portal並輸入帳號密碼後，點擊書籤即可自動輸入驗證碼並登入。第一次點擊時請確保網路暢通，並稍候5~10秒待AI模型載入後即可使用。先前版本：<a href="https://chromewebstore.google.com/detail/portal-ocr/mamafhaiocofdhlajpikaaibhlkieenk" target="_blank" rel="noopener noreferrer">瀏覽器擴充功能</a>（僅供個人電腦使用）。</p>
 
     <h3>手動加入書籤</h3>
-    <p>如果無法拖曳，可手動新增一個書籤，並將以下程式碼貼至「URL」欄位</p>
+    <p>如果無法拖曳，可手動新增一個書籤，並將以下程式碼貼至「URL」欄位：</p>
     <div class="code-container">
         <div class="code-type">URL</div>
         <button class="copy-btn" onclick="copyCode('code-block-v1')">Copy</button>
-        <pre id="code-block-v1">javascript:a=document.querySelectorAll('input[type="checkbox"],input[type="radio"][value="Continue"]');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;}void 0;</pre>
+        <pre id="code-block-v1">javascript:(async()%3D%3E%7Bif(!location.pathname.endsWith(%22%2FGeneral%2FLogin.aspx%22))return%3Blet%20M%3D%22img%23imgVerifyCode%22%2CS%3D'input%5Bname%3D%22txtVerifyCode%22%5D'%2Cq%3D%22%23imgBtnSubmitNew%22%2CW%3Ddocument.querySelector(M)%2CZ%3Ddocument.querySelector(S)%3Bif(!W%7C%7C!Z)return%3Blet%20I%3D%22https%3A%2F%2Fraw.githubusercontent.com%2FJ1soon%2Frenew%2Fmain%2Focr.onnx%22%2CP%3D%22https%3A%2F%2Fj1soon.github.io%2Frenew%2Fonnxruntime%2F%22%2CL%3D%22Portal-OCR%22%2Cj%3D%22models%22%2Cv%3D()%3D%3Enew%20Promise((k%2CJ)%3D%3E%7Blet%20f%3DindexedDB.open(L%2C1)%3Bf.onupgradeneeded%3D()%3D%3Ef.result.createObjectStore(j)%2Cf.onsuccess%3D()%3D%3Ek(f.result)%2Cf.onerror%3D()%3D%3EJ(f.error)%7D)%2CH%3D(k%2CJ%2Cf%2C...z)%3D%3Enew%20Promise((K%2C%24)%3D%3E%7Blet%20V%3Dk.transaction(j%2CJ).objectStore(j)%5Bf%5D(...z)%3BV.onsuccess%3D()%3D%3EK(V.result)%2CV.onerror%3D()%3D%3E%24(V.error)%7D)%2CD%3Dasync(k%2CJ)%3D%3E%7Blet%20f%3Dawait%20v()%2Cz%3Dawait%20H(f%2C%22readonly%22%2C%22get%22%2Ck)%3Bif(!z)%7Blet%20K%3Dawait%20fetch(k)%3Bif(!K.ok)throw%20Error()%3Bz%3Dawait%20K.arrayBuffer()%2Cawait%20H(f%2C%22readwrite%22%2C%22put%22%2Cz%2Ck)%7Dreturn%20f.close()%2Cz%7D%2Cx%3Dasync()%3D%3E%7Bif(globalThis.ort)return%3Blet%5Bk%2CJ%2Cf%5D%3Dawait%20Promise.all(%5BD(%60%24%7BP%7Dort.min.js%60%2C%22ONNX%20Runtime%20script%22)%2CD(%60%24%7BP%7Dort-wasm-simd-threaded.mjs%60%2C%22ONNX%20Runtime%20module%22)%2CD(%60%24%7BP%7Dort-wasm-simd-threaded.wasm%60%2C%22ONNX%20Runtime%20WASM%22)%5D)%2Cz%3DURL.createObjectURL(new%20Blob(%5Bk%5D%2C%7Btype%3A%22text%2Fjavascript%22%7D))%2CK%3DURL.createObjectURL(new%20Blob(%5BJ%5D%2C%7Btype%3A%22text%2Fjavascript%22%7D))%2C%24%3DURL.createObjectURL(new%20Blob(%5Bf%5D%2C%7Btype%3A%22application%2Fwasm%22%7D))%3BglobalThis.__decaptchaRuntimeUrls%3D%5Bz%2CK%2C%24%5D%2Cawait%20new%20Promise((V%2CF)%3D%3E%7Blet%20G%3DObject.assign(document.createElement(%22script%22)%2C%7Bsrc%3Az%2Conload%3AV%2Conerror%3A()%3D%3EF(Error())%7D)%3Bdocument.head.append(G)%7D)%2Cort.env.wasm.wasmPaths%3D%7Bmjs%3AK%2Cwasm%3A%24%7D%7D%2CU%3Dasync()%3D%3E%7Blet%20k%3Dawait%20v()%2CJ%3Dawait%20H(k%2C%22readonly%22%2C%22get%22%2CI)%3Bif(!J)%7Blet%20f%3Dawait%20fetch(I)%3Bif(!f.ok)throw%20Error()%3BJ%3Dawait%20f.arrayBuffer()%2Cawait%20H(k%2C%22readwrite%22%2C%22put%22%2CJ%2CI)%7Dreturn%20k.close()%2CJ%7D%3Btry%7Blet%20k%3Ddocument.querySelector(q)%3Bif(!k)throw%20Error()%3Bif(!W.complete%7C%7C!W.naturalWidth)throw%20Error()%3Blet%5BJ%5D%3Dawait%20Promise.all(%5BU()%2Cx()%5D)%2Cf%3Dawait%20ort.InferenceSession.create(new%20Uint8Array(J))%2Cz%3D64%2CK%3DMath.ceil(z*W.naturalWidth%2FW.naturalHeight)%2CV%3DObject.assign(document.createElement(%22canvas%22)%2C%7Bwidth%3AK%2Cheight%3Az%7D).getContext(%222d%22%2C%7BwillReadFrequently%3A!0%7D)%3BV.drawImage(W%2C0%2C0%2CK%2Cz)%3Blet%20F%3DV.getImageData(0%2C0%2CK%2Cz).data%2CG%3Dnew%20Float32Array(z*K)%3Bfor(let%20Q%3D0%3BQ%3CG.length%3BQ%2B%2B)G%5BQ%5D%3D((F%5BQ*4%5D*0.299%2BF%5BQ*4%2B1%5D*0.587%2BF%5BQ*4%2B2%5D*0.114)%2F255-0.5)%2F0.5%3Blet%20B%3Dnew%20ort.Tensor(%22float32%22%2CG%2C%5B1%2C1%2Cz%2CK%5D)%2CC%3D(await%20f.run(%7B%5Bf.inputNames%5B0%5D%5D%3AB%7D))%5Bf.outputNames%5B0%5D%5D%2C%5BR%2C%2CN%5D%3DC.dims%2CA%3D%22%5Cx00abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%22%2CX%3D%22%22%2Cw%3D0%3Bfor(let%20Q%3D0%3BQ%3CR%3BQ%2B%2B)%7Blet%20Y%3D0%3Bfor(let%20y%3D1%3By%3CN%3By%2B%2B)if(C.data%5BQ*N%2By%5D%3EC.data%5BQ*N%2BY%5D)Y%3Dy%3Bif(Y%26%26Y!%3D%3Dw)X%2B%3DA%5BY%5D%3Bw%3DY%7Dif(X%3DX.toUpperCase()%2C!X)throw%20Error()%3Bif(Z.value%3DX%2CZ.dispatchEvent(new%20Event(%22input%22%2C%7Bbubbles%3A!0%7D))%2CZ.dispatchEvent(new%20Event(%22change%22%2C%7Bbubbles%3A!0%7D))%2CZ.value!%3D%3DX)throw%20Error()%3Bk.click()%7Dcatch(k)%7B%7D%7D)()%3B</pre>
     </div>
   </div>
   <div class="card">
-    <h1>新版 v3.0</h1>
+    <h1>Auto Renew v3.0</h1>
 
     <!-- Bookmarklet link. Double quotes inside the javascript are escaped as HTML entities so the attribute is valid. -->
     <a class="bookmark-link" draggable="true" href="javascript:(function(){var a=document.querySelectorAll('td td td input[type=&quot;checkbox&quot;],input[type=&quot;radio&quot;][value=&quot;Continue&quot;],span&gt;*&gt;*&gt;*&gt;input[type=&quot;checkbox&quot;]');for(i=0;i&lt;a.length;i++){a[i].checked=!a[i].checked;if(a[i].onclick){a[i].onclick();}}})();">ARv3</a>
     <hr>
     <h3 style="margin-top:18px">更新內容</h3>
     <p>Auto Renew version 3.0，支援Lab Data帶入頁面</p>
+    <h3 style="margin-top:18px">使用說明</h3>
+    <p>開啟Lab Data帶入頁面後，點擊書籤即可勾選所有檢驗項目，方便一鍵帶入。開啟Order Renew頁面後，點擊書籤即可勾選所有醫囑的核取方塊，隔離醫囑則會勾選「繼續隔離」，再次點選即可全部取消。注意：更新醫囑前請確認所有項目皆正確無誤！</p>
 
     <h3>手動加入書籤</h3>
-    <p>如果無法拖曳，可手動新增一個書籤，並將以下程式碼貼至「URL」欄位</p>
+    <p>如果無法拖曳，可手動新增一個書籤，並將以下程式碼貼至「URL」欄位：</p>
     <div class="code-container">
         <div class="code-type">URL</div>
         <button class="copy-btn" onclick="copyCode('code-block-v2')">Copy</button>
@@ -60,20 +176,31 @@
     <a class="bookmark-link" draggable="true" href="javascript:(function(){setTimeout(function(){var a=document.querySelectorAll('input#NTUHWeb1_rbl_ConsciousStatusCode_0,input#NTUHWeb1_rb_Verbal_N,input#NTUHWeb1_rb_Cognitive_N,input#NTUHWeb1_rb_Movement_N,input#NTUHWeb1_rbl_ChestPainCompression_0,input#NTUHWeb1_rb_InstepPulse_N,input#NTUHWeb1_rbl_RhythmCode_0,input#NTUHWeb1_rbl_Cough_0,input#NTUHWeb1_rb_OxygenSupply_N,input#NTUHWeb1_rb_RespiratoryPattern_N,input#NTUHWeb1_rb_BreathingSound_N,input#NTUHWeb1_rb_SputumElimination_N,input#NTUHWeb1_rbl_Sputum_0,input#NTUHWeb1_rbl_SputumColor_0,input#NTUHWeb1_rbl_SputumAppearanceCode_0,input#NTUHWeb1_rbl_ArtificalRespiratoryTractCode_0,input#NTUHWeb1_rbl_UrineCharacterCode_0,input#NTUHWeb1_rbl_InflamInfect_0,input#NTUHWeb1_rbl_Secretion_0,input#NTUHWeb1_rbl_SkinCondition4cm_0');for(var i=0;i&lt;a.length;i++){a[i].click();}},200);})();">Auto Assess</a>
     <hr>
     <h3 style="margin-top:18px">使用說明</h3>
-    <p>開啟「身體評估」或「傷口護理紀錄」頁面，點選書籤即可一鍵勾選那些沒有自動帶入的項目。再次點選即可全部取消。注意：儲存評估前請確認所有評估項目皆無誤！</p>
+    <p>開啟「身體評估」或「傷口護理紀錄」頁面後，點擊書籤即可一鍵勾選那些沒有自動帶入的項目。再次點選即可全部取消。注意：儲存評估前請確認所有評估項目皆正確無誤！</p>
 
     <h3>手動加入書籤</h3>
-    <p>如果無法拖曳，可手動新增一個書籤，並將以下程式碼貼至「URL」欄位</p>
+    <p>如果無法拖曳，可手動新增一個書籤，並將以下程式碼貼至「URL」欄位：</p>
     <div class="code-container">
         <div class="code-type">URL</div>
         <button class="copy-btn" onclick="copyCode('code-block-v3')">Copy</button>
         <pre id="code-block-v3">javascript:(function(){setTimeout(function(){var a=document.querySelectorAll('input#NTUHWeb1_rbl_ConsciousStatusCode_0,input#NTUHWeb1_rb_Verbal_N,input#NTUHWeb1_rb_Cognitive_N,input#NTUHWeb1_rb_Movement_N,input#NTUHWeb1_rbl_ChestPainCompression_0,input#NTUHWeb1_rb_InstepPulse_N,input#NTUHWeb1_rbl_RhythmCode_0,input#NTUHWeb1_rbl_Cough_0,input#NTUHWeb1_rb_OxygenSupply_N,input#NTUHWeb1_rb_RespiratoryPattern_N,input#NTUHWeb1_rb_BreathingSound_N,input#NTUHWeb1_rb_SputumElimination_N,input#NTUHWeb1_rbl_Sputum_0,input#NTUHWeb1_rbl_SputumColor_0,input#NTUHWeb1_rbl_SputumAppearanceCode_0,input#NTUHWeb1_rbl_ArtificalRespiratoryTractCode_0,input#NTUHWeb1_rbl_UrineCharacterCode_0,input#NTUHWeb1_rbl_InflamInfect_0,input#NTUHWeb1_rbl_Secretion_0,input#NTUHWeb1_rbl_SkinCondition4cm_0');for(var i=0;i&lt;a.length;i++){a[i].click();}},200);})();</pre>
     </div>
   </div>
+  </main>
+  <footer>&copy; 2025&ndash;2026 J1soon. All rights reserved.</footer>
   <script>
-    function copyCode(elementId){
+    const portalOcrBookmarklet = document.getElementById('code-block-v1').textContent.trim();
+    document.getElementById('bookmark-link-v1').href = portalOcrBookmarklet;
+
+    async function copyCode(elementId){
       const codeText = document.getElementById(elementId).textContent.trim();
-      navigator.clipboard.writeText(codeText);
+      await navigator.clipboard.writeText(codeText);
+
+      const button = document.querySelector(`[onclick="copyCode('${elementId}')"]`);
+      if (!button) return;
+
+      button.textContent = 'Copied';
+      window.setTimeout(() => { button.textContent = 'Copy'; }, 1600);
     }
   </script>
 </body>
